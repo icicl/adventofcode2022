@@ -2,7 +2,7 @@ import requests, os
 
 cookie = ""
 year = "2022"
-def load(day, delimiters=' ', raw=False, func=lambda x:process(x, delimiters)):
+def load(day, delimiters=' ', raw=False, func=None):
     if not os.path.exists(str(day).zfill(2) + ".txt"):
         r = requests.get("https://adventofcode.com/" + year + "/day/" + str(day) + "/input", headers = {"Cookie": "session=" + cookie})
         if r.status_code != 200:
@@ -14,6 +14,7 @@ def load(day, delimiters=' ', raw=False, func=lambda x:process(x, delimiters)):
         with open(str(day).zfill(2) + ".txt") as f:
             inp = f.read()
     if raw:return inp
+    if func == None: func = lambda x:process(x, delimiters)
     inp = [func(line) for line in inp.split("\n")[:-1]]
     return inp
 
